@@ -62,8 +62,8 @@ if __name__ == '__main__':
     imaginary = Imaginary(phonon, distance=distance)
 
     lattice = imaginary.get_lattice()
-    print "a, b, c =", get_lattice_parameters(lattice)
-    print "alpha, beta, gamma =", get_angles(lattice)
-    print "mesh (x=%f) =" % distance, imaginary.get_mesh()
-
-    print "Imaginary q-point ratio:", imaginary.get_imaginary_qpoint_ratio()
+    print "lattice_lengths: [ %f, %f, %f ]" % tuple(get_lattice_parameters(lattice))
+    print "lattice_angles: [ %f, %f, %f ]" % tuple(get_angles(lattice))
+    print "mesh_length: %f" % distance
+    print "mesh: [ %d, %d, %d ]" % tuple(imaginary.get_mesh())
+    print "ratio: %f" % imaginary.get_imaginary_qpoint_ratio()

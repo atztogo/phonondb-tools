@@ -13,9 +13,13 @@ class DOS:
         self._freqs = None
         self._dos = None
 
+
+    def run(self):
         self._set_mesh(distance=distance)
-        self._run_mesh_sampling()
-        self._run_dos()
+        if self._run_mesh_sampling():
+            self._run_dos()
+            return True
+        return False
 
     def get_lattice(self):
         return self._lattice
@@ -44,18 +48,18 @@ class DOS:
         self._mesh = klength2mesh(distance, self._lattice)
     
     def _run_mesh_sampling(self):
-        self._phonon.set_mesh(self._mesh)
+        return self._phonon.set_mesh(self._mesh)
     
     def _run_dos(self, tetrahedron_method=True):
-        self._phonon.set_total_DOS(tetrahedron_method=tetrahedron_method)
-        self._freqs, self._dos = self._phonon.get_total_DOS()
+        if self._phonon.set_total_DOS(tetrahedron_method=tetrahedron_method):
+            self._freqs, self._dos = self._phonon.get_total_DOS()
     
 
 if __name__ == '__main__':
     import sys
     import yaml
     from phonopy import Phonopy
-    from phonopy.interface.vasp import read_vasp
+    from phonopy.interface.phonopy_yaml import phonopyYaml
     from phonopy.file_IO import parse_FORCE_SETS
     from cogue.crystal.utility import get_angles, get_lattice_parameters
     import matplotlib
@@ -65,7 +69,7 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
     
     phonon_info = yaml.load(open("phonon.yaml"))
-    cell = read_vasp("POSCAR-unitcell")
+    cell = phonopyYaml("POSCAR-unitcell.yaml").get_atoms()
     phonon = Phonopy(cell,
                      phonon_info['supercell_matrix'],
                      is_auto_displacements=False)
@@ -75,11 +79,12 @@ if __name__ == '__main__':
     
     distance = 100
     dos = DOS(phonon, distance=distance)
-    dos.plot_dos(plt)
-
-    lattice = dos.get_lattice()
-    print "a, b, c =", get_lattice_parameters(lattice)
-    print "alpha, beta, gamma =", get_angles(lattice)
-    print "mesh (x=%f) =" % distance, dos.get_mesh()
-
-    dos.save_dos(plt)
+    if dos.run():
+        dos.plot_dos(plt)
+        lattice = dos.get_lattice()
+        print "a, b, c =", get_lattice_parameters(lattice)
+        print "alpha, beta, gamma =", get_angles(lattice)
+        print "mesh (x=%f) =" % distance, dos.get_mesh()
+        dos.save_dos(plt)
+    else:
+        print "DOS calculation failed."
