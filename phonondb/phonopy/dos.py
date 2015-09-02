@@ -32,14 +32,16 @@ class DOS:
 
     def plot_dos(self, plt):
         fig = plt.figure()
+        fig.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15)
+        plt.tick_params(axis='both', which='major', labelsize=10.5)
         ax = fig.add_subplot(111)
         plt.plot(self._freqs, self._dos, 'r-')
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
         aspect = (xlim[1] - xlim[0]) / (ylim[1] - ylim[0])
-        ax.set_aspect(aspect * 0.5)
+        ax.set_aspect(aspect * 0.55)
         plt.xlabel("Frequency (THz)")
-        plt.ylabel("Phonon DOS (States/THz$\cdot$unitcell)")
+        plt.ylabel("Phonon DOS\n(States/THz$\cdot$unitcell)")
         
     def save_dos(self, plt):
         plt.savefig("dos.png")
@@ -68,6 +70,10 @@ if __name__ == '__main__':
     matplotlib.rcParams.update({'figure.figsize': (5, 3)})
     import matplotlib.pyplot as plt
     
+    if len(sys.argv) > 1:
+        cell = phonopyYaml(sys.argv[1]).get_atoms()
+    else:
+        cell = phonopyYaml("POSCAR-unitcell.yaml").get_atoms()
     phonon_info = yaml.load(open("phonon.yaml"))
     cell = phonopyYaml("POSCAR-unitcell.yaml").get_atoms()
     phonon = Phonopy(cell,

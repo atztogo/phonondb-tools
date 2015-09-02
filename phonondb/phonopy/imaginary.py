@@ -40,17 +40,16 @@ if __name__ == '__main__':
     import sys
     import yaml
     from phonopy import Phonopy
-    from phonopy.interface.vasp import read_vasp
+    from phonopy.interface.phonopy_yaml import phonopyYaml
     from phonopy.file_IO import parse_FORCE_SETS
     from cogue.crystal.utility import get_angles, get_lattice_parameters
     import matplotlib
 
-    matplotlib.use('Agg')            
-    matplotlib.rcParams.update({'figure.figsize': (5, 3)})
-    import matplotlib.pyplot as plt
-    
+    if len(sys.argv) > 1:
+        cell = phonopyYaml(sys.argv[1]).get_atoms()
+    else:
+        cell = phonopyYaml("POSCAR-unitcell.yaml").get_atoms()
     phonon_info = yaml.load(open("phonon.yaml"))
-    cell = read_vasp("POSCAR-unitcell")
     phonon = Phonopy(cell,
                      phonon_info['supercell_matrix'],
                      is_auto_displacements=False)
