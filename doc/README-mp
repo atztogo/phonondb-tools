@@ -1,0 +1,5 @@
+1. Make directory from d000 to d999.
+2. Put necessary data, .lzma, .png, POSCAR.yaml, etc, in each directory by using file_move.sh.
+3. Run create_sphinx_files.sh.
+4. Run run_sphinx.sh.
+5. Web is created in the _build directory.
