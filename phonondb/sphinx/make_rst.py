@@ -5,7 +5,7 @@ import glob
 import os.path
 from datetime import date
 from cogue import symmetry as get_symmetry
-from cogue.interface.vasp_io import read_poscar
+from cogue.interface.vasp_io import read_poscar_yaml
 
 tmpl_index = """Materials id {midstart} - {midend}
 ====================================================
@@ -68,7 +68,7 @@ for num in numbers:
                 pretty_formula = line.split(':')[1].strip()
                 break
 
-    symmetry = get_symmetry(read_poscar("mp-%d-POSCAR" % num))
+    symmetry = get_symmetry(read_poscar_yaml("mp-%d-POSCAR.yaml" % num)[0])
 
     with open("mp-%d.rst" % num, 'w') as w:
         today = date.today()
@@ -88,10 +88,16 @@ for num in numbers:
             w.write("-----------\n\n")
             w.write(".. image:: mp-{mid}-dos.png\n\n".format(mid=num))
 
-        with open("mp-%d-POSCAR" % num) as f_poscar:
-            w.write("POSCAR\n")
-            w.write("-------\n\n")
-            w.write("The following POSCAR shows the crystal structure after the relaxation during the process of the phonon calculation.\n\n")
+        tprops_filename = "mp-%d-tprops.png" % num
+        if os.path.exists(tprops_filename):
+            w.write("Thermal properties at constant volume\n")
+            w.write("--------------------------------------\n\n")
+            w.write(".. image:: mp-{mid}-tprops.png\n\n".format(mid=num))
+
+        with open("mp-%d-POSCAR.yaml" % num) as f_poscar:
+            w.write("POSCAR.yaml\n")
+            w.write("----------------\n\n")
+            w.write("POSCAR.yaml shows the crystal structure after the relaxation used for this phonon calculation.\n\n")
 
             w.write("::\n\n")
             for line in f_poscar:

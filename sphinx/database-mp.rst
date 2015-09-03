@@ -1,10 +1,13 @@
-Crystal structures obtained from the Materials Project
+Data associated with Materials Project IDs
 =======================================================
+
+Initial crystal structures used to calculate data in this section were
+obtained from the Materials Project.
 
 .. _crystal_structure_and_citation:
 
-Crystal structure and citation
--------------------------------
+About crystal structure and citation
+-------------------------------------
 
 .. _the Materials Project: https://www.materialsproject.org/
 .. _the Materials Project citation: https://materialsproject.org/citing
