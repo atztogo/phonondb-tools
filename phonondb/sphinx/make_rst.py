@@ -20,7 +20,8 @@ tmpl_mp = """Materials id {mid} / {pretty_formula}
 
 - Date page updated: {date}
 - Space group type: {spg}
-- Raw data: :download:`{filename} <./{filename}>`
+- Phonon raw data: :download:`{filename} <./{filename}>`
+- Mode-Gruneisen parameter raw data: :download:`{filename_gruneisen} <./{filename_gruneisen}>`
 - Link to Materials Project: `https://www.materialsproject.org/materials/mp-{mid}/ <https://www.materialsproject.org/materials/mp-{mid}/>`_
 
 """
@@ -48,8 +49,8 @@ International License <http://creativecommons.org/licenses/by/4.0/>`_.
 """
 
 d = int(sys.argv[1])
-files = glob.glob("mp-*.tar.lzma")
-numbers = [int(filename.split('.')[0].replace("mp-", "")) for filename in files]
+files = glob.glob("mp-*-POSCAR.yaml")
+numbers = [int(filename.split('.')[0].replace("mp-", "").replace("-POSCAR", "")) for filename in files]
 numbers.sort()
 
 # index.rst
@@ -78,6 +79,7 @@ for num in numbers:
                                                      symmetry['number'],
                                                      symmetry['hall']),
                                filename="mp-%d.tar.lzma" % num,
+                               filename_gruneisen="mp-%d-gruneisen.tar.lzma" % num,
                                date="%d-%d-%d" % (today.year,
                                                   today.month,
                                                   today.day)))
@@ -94,6 +96,12 @@ for num in numbers:
             w.write("--------------------------------------\n\n")
             w.write(".. image:: mp-{mid}-tprops.png\n\n".format(mid=num))
 
+        gruneisen_filename = "mp-%d-gruneisen.png" % num
+        if os.path.exists(gruneisen_filename):
+            w.write("Mode Gruneisen parameter\n")
+            w.write("-------------------------\n\n")
+            w.write(".. image:: mp-{mid}-gruneisen.png\n\n".format(mid=num))
+            
         with open("mp-%d-POSCAR.yaml" % num) as f_poscar:
             w.write("POSCAR.yaml\n")
             w.write("----------------\n\n")

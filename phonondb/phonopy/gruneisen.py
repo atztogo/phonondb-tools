@@ -77,7 +77,10 @@ if __name__ == '__main__':
 
     phonons = []
     for dirname in ('orig', 'plus', 'minus'):
-        cell = phonopyYaml("%s/POSCAR-unitcell.yaml" % dirname).get_atoms()
+        if len(sys.argv) > 1:
+            cell = phonopyYaml("%s/" % dirname + sys.argv[1]).get_atoms()
+        else:
+            cell = phonopyYaml("%s/POSCAR-unitcell.yaml" % dirname).get_atoms()
         phonon_info = yaml.load(open("%s/%s.yaml" % (dirname, dirname)))
         phonon = Phonopy(cell,
                          phonon_info['supercell_matrix'],

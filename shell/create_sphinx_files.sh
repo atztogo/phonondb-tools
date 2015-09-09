@@ -8,4 +8,4 @@ for i in {000..999};do
     fi
 done
 
-sphinx-build -b html . _build
+#sphinx-build -b html . _build
