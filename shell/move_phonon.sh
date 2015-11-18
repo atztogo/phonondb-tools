@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-for i in `cat phonon_done_ids.dat`;do
+for i in `cat id_nums.dat`;do
     d=`printf "%06d\n" $i|cut -c 1-3`
     echo $i $d
 
