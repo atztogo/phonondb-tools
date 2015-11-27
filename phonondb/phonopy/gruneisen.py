@@ -72,16 +72,17 @@ if __name__ == '__main__':
     import matplotlib
 
     matplotlib.use('Agg')            
-    matplotlib.rcParams.update({'figure.figsize': (4, 4)})
+    matplotlib.rcParams.update({'figure.figsize': (4, 4),
+                                'font.family': 'serif'})
     import matplotlib.pyplot as plt
 
     phonons = []
-    for dirname in ('orig', 'plus', 'minus'):
+    for dirname in ('gruneisen-01', 'gruneisen-02', 'gruneisen-00'):
         if len(sys.argv) > 1:
             cell = phonopyYaml("%s/" % dirname + sys.argv[1]).get_atoms()
         else:
             cell = phonopyYaml("%s/POSCAR-unitcell.yaml" % dirname).get_atoms()
-        phonon_info = yaml.load(open("%s/%s.yaml" % (dirname, dirname)))
+        phonon_info = yaml.load(open("%s/phonon.yaml" % dirname))
         phonon = Phonopy(cell,
                          phonon_info['supercell_matrix'],
                          is_auto_displacements=False)

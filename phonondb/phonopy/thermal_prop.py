@@ -1,5 +1,5 @@
 import numpy as np
-from cogue.crystal.utility import klength2mesh
+from cogue.crystal.utility import klength2mesh, get_Z
 
 class ThermalProperty:
     def __init__(self,
@@ -8,10 +8,8 @@ class ThermalProperty:
         self._phonon = phonon # Phonopy object
         self._lattice = np.array(phonon.get_unitcell().get_cell().T,
                                  dtype='double')
-
         self._mesh = None
         self._thermal_properties = None
-
 
     def run(self):
         self._set_mesh(distance=distance)
@@ -32,24 +30,25 @@ class ThermalProperty:
 
     def plot(self, plt, max_index=101):
         temps, fe, entropy, cv = self._thermal_properties
+        Z = self._get_Z()
         fig = plt.figure()
         fig.subplots_adjust(left=0.20, right=0.92, bottom=0.18)
         plt.tick_params(axis='both', which='major', labelsize=10.5)
         ax = fig.add_subplot(111)
-        plt.plot(temps[:max_index], fe[:max_index], 'r-')
-        plt.plot(temps[:max_index], entropy[:max_index], 'b-')
-        plt.plot(temps[:max_index], cv[:max_index], 'g-')
+        plt.plot(temps[:max_index], fe[:max_index] / Z, 'r-')
+        plt.plot(temps[:max_index], entropy[:max_index] / Z, 'b-')
+        plt.plot(temps[:max_index], cv[:max_index] / Z, 'g-')
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
         aspect = (xlim[1] - xlim[0]) / (ylim[1] - ylim[0])
         # ax.set_aspect(aspect * 0.7)
-        plt.legend(('Free energy [kJ/mol]', 'Entropy [J/K/mol]',
-                    r'C$_\mathrm{V}$ [J/K/mol]'),
+        plt.legend(('Free energy (kJ/mol)]', 'Entropy (J/K/mol)',
+                    r'$C_\mathrm{V}$ (J/K/mol)'),
                    loc='best',
                    prop={'size':8.5},
                    frameon=False)
         plt.xlabel("Temperatures (K)")
-        plt.ylabel("Thermal properties (*/unitcell)")
+        plt.ylabel("Thermal properties")
         
     def save_figure(self, plt):
         plt.savefig("tprops.png")
@@ -63,8 +62,12 @@ class ThermalProperty:
     def _run_thermal_properties(self):
         self._phonon.set_thermal_properties(t_max=3000)
         self._thermal_properties = self._phonon.get_thermal_properties()
-    
 
+    def _get_Z(self):
+        primitive = self._phonon.get_primitive()
+        numbers = primitive.get_atomic_numbers()
+        return get_Z(numbers)
+            
 if __name__ == '__main__':
     import sys
     import yaml
@@ -75,7 +78,8 @@ if __name__ == '__main__':
     import matplotlib
 
     matplotlib.use('Agg')            
-    matplotlib.rcParams.update({'figure.figsize': (4.5, 3)})
+    matplotlib.rcParams.update({'figure.figsize': (4.5, 3),
+                                'font.family': 'serif'})
     import matplotlib.pyplot as plt
     
     if len(sys.argv) > 1:
@@ -95,9 +99,9 @@ if __name__ == '__main__':
     if tprops.run():
         tprops.plot(plt)
         lattice = tprops.get_lattice()
-        print "a, b, c =", get_lattice_parameters(lattice)
-        print "alpha, beta, gamma =", get_angles(lattice)
-        print "mesh (x=%f) =" % distance, tprops.get_mesh()
+        print("a, b, c = %f %f %f" % tuple(get_lattice_parameters(lattice)))
+        print("alpha, beta, gamma = %f %f %f" % tuple(get_angles(lattice)))
+        print("mesh (x=%f) = %s" % (distance, tprops.get_mesh()))
         tprops.save_figure(plt)
     else:
         print "Thermal property calculation failed."

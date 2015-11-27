@@ -67,7 +67,8 @@ if __name__ == '__main__':
     import matplotlib
 
     matplotlib.use('Agg')            
-    matplotlib.rcParams.update({'figure.figsize': (5, 3)})
+    matplotlib.rcParams.update({'figure.figsize': (5, 3),
+                                'font.family': 'serif'})
     import matplotlib.pyplot as plt
     
     if len(sys.argv) > 1:
