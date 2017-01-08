@@ -61,7 +61,7 @@ if __name__ == '__main__':
     import sys
     import yaml
     from phonopy import Phonopy
-    from phonopy.interface.phonopy_yaml import phonopyYaml
+    from phonopy.interface.phonopy_yaml import get_unitcell_from_phonopy_yaml
     from phonopy.file_IO import parse_FORCE_SETS
     from cogue.crystal.utility import get_angles, get_lattice_parameters
     import matplotlib
@@ -72,14 +72,12 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
     
     if len(sys.argv) > 1:
-        cell = phonopyYaml(sys.argv[1]).get_atoms()
+        cell = get_unitcell_from_phonopy_yaml(sys.argv[1])
     else:
-        cell = phonopyYaml("POSCAR-unitcell.yaml").get_atoms()
+        cell = get_unitcell_from_phonopy_yaml("POSCAR-unitcell.yaml")
     phonon_info = yaml.load(open("phonon.yaml"))
-    cell = phonopyYaml("POSCAR-unitcell.yaml").get_atoms()
-    phonon = Phonopy(cell,
-                     phonon_info['supercell_matrix'],
-                     is_auto_displacements=False)
+    cell = get_unitcell_from_phonopy_yaml("POSCAR-unitcell.yaml")
+    phonon = Phonopy(cell, phonon_info['supercell_matrix'])
     force_sets = parse_FORCE_SETS()
     phonon.set_displacement_dataset(force_sets)
     phonon.produce_force_constants()
