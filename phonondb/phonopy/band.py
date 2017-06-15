@@ -40,7 +40,7 @@ class Band:
                 special_points.append(d[0] + d_shift)
                 unconnected_points.append(special_points[-2])
                 unconnected_points.append(special_points[-1])
-            plt.plot(d + d_shift, f, 'r-')
+            plt.plot(d + d_shift, f, 'r-', linewidth=1)
 
         special_points.append(distances[-1][-1] + d_shift)
         unconnected_points.append(special_points[-1])
@@ -103,8 +103,12 @@ class Band:
         labels.append(prev_path[1])
 
         for i, l in enumerate(labels):
-            if l == 'GAMMA':
-                labels[i] = "$\Gamma$"
+            if 'GAMMA' in l:
+                labels[i] = "$" + l.replace("GAMMA", "\Gamma") + "$"
+            elif 'SIGMA' in l:
+                labels[i] = "$" + l.replace("SIGMA", "\Sigma") + "$"
+            elif 'DELTA' in l:
+                labels[i] = "$" + l.replace("DELTA", "\Delta") + "$"
             else:
                 labels[i] = "$\mathrm{%s}$" % l
 
