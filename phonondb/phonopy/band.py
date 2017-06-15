@@ -60,9 +60,14 @@ class Band:
         ax.yaxis.set_ticks_position('both')
         ax.xaxis.set_tick_params(which='both', direction='in')
         ax.yaxis.set_tick_params(which='both', direction='in')
+
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        ax.spines['left'].set_visible(False)
         
-        for d in unconnected_points[1:-1]:
-            plt.axvline(x=d, linestyle='-', linewidth=0.5, color='k')
+        for d in unconnected_points:
+            plt.axvline(x=d, linestyle='-', linewidth=1.5, color='k')
         
         x_pairs = np.reshape(unconnected_points, (-1, 2))
         x_pairs /= unconnected_points[-1]
@@ -70,8 +75,10 @@ class Band:
         for pair in x_pairs:
             plt.axhline(y=0, xmin=pair[0], xmax=pair[1],
                         linestyle=':', linewidth=0.5, color='b')
-            plt.axhline(y=ymin, xmin=pair[0], xmax=pair[1], color='k')
-            plt.axhline(y=ymax, xmin=pair[0], xmax=pair[1], color='k')
+            plt.axhline(y=ymin, xmin=pair[0], xmax=pair[1],
+                        linestyle='-', linewidth=1.5, color='k')
+            plt.axhline(y=ymax, xmin=pair[0], xmax=pair[1],
+                        linestyle='-', linewidth=1.5,  color='k')
 
         fig.tight_layout()
         
