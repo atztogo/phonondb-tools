@@ -127,8 +127,8 @@ if __name__ == '__main__':
     if dos.run():
         dos.plot_dos(plt)
         lattice = dos.get_lattice()
-        print("a, b, c = %s" % get_lattice_parameters(lattice))
-        print("alpha, beta, gamma = %s" % str(get_angles(lattice)))
+        print("a, b, c = %f %f %f" % tuple(get_lattice_parameters(lattice)))
+        print("alpha, beta, gamma = %f %f %f" % tuple(get_angles(lattice)))
         print("mesh (x=%f) = %s" % (distance, dos.get_mesh()))
         dos.save_dos(plt)
     else:

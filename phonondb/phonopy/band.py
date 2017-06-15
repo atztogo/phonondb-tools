@@ -18,10 +18,6 @@ class Band:
                 unitcell.get_atomic_numbers())
         band_path = seekpath.get_path(cell)
 
-        for key in band_path:
-            print("%s:" % key)
-            print(band_path[key])
-
         self._set_band(band_path)
         self._set_labels(band_path)
         return self._run_band()
@@ -29,7 +25,7 @@ class Band:
     def get_band(self):
         return self._phonon.get_band_structure()
 
-    def plot_band(self, plt):
+    def plot_band(self, plt, delta_d=0.02):
         fig, ax = plt.subplots()
 
         _, distances, frequencies, _ = self._phonon.get_band_structure()
@@ -40,7 +36,7 @@ class Band:
         for d, f, c in zip(distances, frequencies, self._connected):
             special_points.append(d[0] + d_shift)
             if not c:
-                d_shift += 0.02
+                d_shift += delta_d
                 special_points.append(d[0] + d_shift)
                 unconnected_points.append(special_points[-2])
                 unconnected_points.append(special_points[-1])
@@ -175,19 +171,25 @@ if __name__ == '__main__':
             nac_params['factor'] = 14.399652
             phonon.set_nac_params(nac_params)
 
-
     band = Band(phonon, num_qpoints=101)
     if band.run():
         _, distances, frequencies, _ = band.get_band()
         d_end = distances[-1][-1]
         f_max = np.max(frequencies)
-        length = phonon.get_primitive().get_volume() ** (1.0 / 3)
+        primitive = phonon.get_primitive()
+        num_atom = primitive.get_number_of_atoms()
+        length = num_atom ** (1.0 / 3) * 4.5
 
-        matplotlib.use('Agg')            
-        matplotlib.rcParams.update({'figure.figsize': (d_end / length * 40, 3.1),
+        figsize_x = d_end * length
+        margin = 0.7
+        scale = 0.15
+        delta_d = d_end / (figsize_x - margin) * scale
+
+        matplotlib.use('Agg')
+        matplotlib.rcParams.update({'figure.figsize': (figsize_x, 3.1),
                                     'font.family': 'serif'})
         import matplotlib.pyplot as plt
 
-        band.plot_band(plt)
+        band.plot_band(plt, delta_d=(delta_d))
         band.save_band(plt)
 

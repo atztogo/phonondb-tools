@@ -77,11 +77,12 @@ class ThermalProperty:
         return get_Z(numbers)
             
 if __name__ == '__main__':
+    import os
     import sys
     import yaml
     from phonopy import Phonopy
     from phonopy.interface.phonopy_yaml import get_unitcell_from_phonopy_yaml
-    from phonopy.file_IO import parse_FORCE_SETS
+    from phonopy.file_IO import parse_FORCE_SETS, parse_BORN
     from cogue.crystal.utility import get_angles, get_lattice_parameters
     import matplotlib
 
@@ -99,6 +100,12 @@ if __name__ == '__main__':
     force_sets = parse_FORCE_SETS()
     phonon.set_displacement_dataset(force_sets)
     phonon.produce_force_constants()
+    if os.path.isfile("BORN"):
+        with open("BORN") as f:
+            primitive = phonon.get_primitive()
+            nac_params = parse_BORN(primitive, filename="BORN")
+            nac_params['factor'] = 14.399652
+            phonon.set_nac_params(nac_params)
     
     distance = 100
     tprops = ThermalProperty(phonon, distance=distance)
