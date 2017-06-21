@@ -84,7 +84,8 @@ def make_index_rst_for_each1000(d, numbers):
     with open("index.rst", 'w') as w:
         w.write(tmpl_index.format(midstart="%d000" % d, midend="%d999" % d))
         for num in numbers:
-            w.write("   mp-{num}\n".format(num=num))
+            if num in range(d * 1000, (d + 1) * 1000):
+                w.write("   mp-{num}\n".format(num=num))
 
 def make_each_data_rst(num, mp_dat_directory, data_directory):
     pretty_formula = ""
