@@ -12,7 +12,9 @@ Available data
 .. toctree::
    :maxdepth: 1
 
+   citation
    database-mp
+   database-mp-20151124
 
 License
 --------
