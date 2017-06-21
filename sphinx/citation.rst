@@ -12,8 +12,9 @@ About crystal structure and citation
 .. _spglib: http://spglib.sourceforge.net/
 .. _pymatgen: http://pymatgen.org/
 
-Phonon calculations shown in this section were performed using the
-crystal structures obtained as follows:
+Phonon calculations shown in phonon-databases at 2017-06-21 and
+2015-11-24 were performed using the crystal structures obtained as
+follows:
 
 1. Initial crystal structures were obtained from `the Materials Project`_.
 2. Each crystal structure was symmetrized and standardized using
