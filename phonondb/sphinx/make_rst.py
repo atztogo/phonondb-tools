@@ -81,10 +81,16 @@ def make_index_rst_for_each1000(d, numbers):
     """
     This creates the top page, index_rst.
     """
-    with open("index.rst", 'w') as w:
-        w.write(tmpl_index.format(midstart="%d000" % d, midend="%d999" % d))
-        for num in numbers:
-            if num in range(d * 1000, (d + 1) * 1000):
+
+    d_numbers = []
+    for num in numbers:
+        if num in range(d * 1000, (d + 1) * 1000):
+            d_numbers.append(num)
+
+    if d_numbers:
+        with open("index.rst", 'w') as w:
+            w.write(tmpl_index.format(midstart="%d000" % d, midend="%d999" % d))
+            for num in d_numbers:
                 w.write("   mp-{num}\n".format(num=num))
 
 def make_each_data_rst(num, mp_dat_directory, data_directory):
