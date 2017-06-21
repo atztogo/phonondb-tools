@@ -1,11 +1,12 @@
 #!/bin/zsh
 
 for i in {000..999};do 
-    if [ `find d$i -name "*.lzma"|wc|awk '{print $1}'` -gt 0 ];then    
+    # if [ `find d$i -name "*.lzma"|wc|awk '{print $1}'` -gt 0 ];then    
+        mkdir d$i
 	cd d$i
-	python ~/code/phonondb/phonondb/sphinx/make_rst.py $i
+	python ../make_rst.py $i
 	cd ..
-    fi
+    # fi
 done
 
 #sphinx-build -b html . _build
