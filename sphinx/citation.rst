@@ -1,10 +1,10 @@
+.. _crystal_structure_and_citation:
+
 References and citations
 ========================
 
-.. _crystal_structure_and_citation:
-
-About crystal structure and citation
--------------------------------------
+About crystal structures
+-------------------------
 
 .. _the Materials Project: https://www.materialsproject.org/
 .. _the Materials Project citation: https://materialsproject.org/citing
@@ -50,3 +50,16 @@ The citation for `the Materials API`_ (`the Materials Project citation`_) is as 
    Computational Materials Science, 2015, 97, 209–215. doi:10.1016/j.commatsci.2014.10.037
 
 We greatly appreciate `the Materials Project`_ and `pymatgen`_.
+
+About phonon band structure paths
+----------------------------------
+
+.. _SeeK-path: http://materialscloud.org/tools/seekpath
+
+For drawing phonon band structures, the band paths are determined by using `SeeK-path`_ developed by Giovanni Pizzi.
+
+::
+
+   Y. Hinuma, G. Pizzi, Y. Kumagai, F. Oba, I. Tanaka
+   Band structure diagram paths based on crystallography
+   Comp. Mat. Sci. 128, 140 (2017). doi:10.1016/j.commatsci.2016.10.015

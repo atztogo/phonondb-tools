@@ -40,16 +40,25 @@ citation_mp = """Citation
 
 .. _the Materials Project: https://www.materialsproject.org/
 .. _the Materials Project citation: https://materialsproject.org/citing
+.. _SeeK-path: http://materialscloud.org/tools/seekpath
 
-The initial crystal structure used to perform phonon calculation is obtained from `the Materials Project`_. More detail about the crystal structure and citation is found at :ref:`crystal_structure_and_citation`.
+.. 
+
+The initial crystal structure used to perform phonon calculation is
+obtained from `the Materials Project`_. The phonon band structure
+paths are determined using `SeeK-path`_. More details about how to
+obtain the crystal structure, how to determine the band structure
+paths, and those citations are found at
+:ref:`crystal_structure_and_citation`.
 
 """
 
 data_license = """License
 --------------
 
-The contents of this web page are licensed under a `Creative Commons 4 Attribution.0
-International License <http://creativecommons.org/licenses/by/4.0/>`_.
+The contents of this web page are licensed under a `Creative Commons
+4.0 Attribution International License
+<http://creativecommons.org/licenses/by/4.0/>`_.
 
 .. image :: https://i.creativecommons.org/l/by/4.0/88x31.png
    :target: http://creativecommons.org/licenses/by/4.0/
