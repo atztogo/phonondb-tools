@@ -77,6 +77,9 @@ class Band:
                         linestyle='-', linewidth=1.5,  color='k')
 
         fig.tight_layout()
+
+    def write_band_yaml(self):
+        self._phonon.write_yaml_band_structure()
         
     def save_band(self, plt):
         plt.savefig("band.png")
@@ -177,6 +180,8 @@ if __name__ == '__main__':
 
     band = Band(phonon, num_qpoints=101)
     if band.run():
+        band.write_band_yaml()
+
         _, distances, frequencies, _ = band.get_band()
         d_end = distances[-1][-1]
         f_max = np.max(frequencies)
