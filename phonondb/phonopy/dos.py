@@ -30,6 +30,9 @@ class DOS:
     def get_dos(self):
         return self._freqs, self._dos
 
+    def write_dos(self):
+        self._phonon.write_total_DOS()
+
     def plot_dos(self, plt):
         fig = plt.figure()
         # fig.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15)
@@ -125,6 +128,8 @@ if __name__ == '__main__':
     distance = 100
     dos = DOS(phonon, distance=distance)
     if dos.run():
+        dos.write_dos()
+
         dos.plot_dos(plt)
         lattice = dos.get_lattice()
         print("a, b, c = %f %f %f" % tuple(get_lattice_parameters(lattice)))
