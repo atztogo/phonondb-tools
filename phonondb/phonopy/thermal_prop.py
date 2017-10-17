@@ -31,13 +31,15 @@ class ThermalProperty:
     def plot(self, plt, max_index=101):
         temps, fe, entropy, cv = self._thermal_properties
         Z = self._get_Z()
-        fig = plt.figure()
-        fig.subplots_adjust(left=0.20, right=0.92, bottom=0.18)
+        fig, ax = plt.subplots()
+        # fig.subplots_adjust(left=0.20, right=0.92, bottom=0.18)
         plt.tick_params(axis='both', which='major', labelsize=10.5)
-        ax = fig.add_subplot(111)
         plt.plot(temps[:max_index], fe[:max_index] / Z, 'r-')
         plt.plot(temps[:max_index], entropy[:max_index] / Z, 'b-')
         plt.plot(temps[:max_index], cv[:max_index] / Z, 'g-')
+        plt.axhline(y=0, linestyle=':', linewidth=0.5, color='k')
+
+        plt.xlim(xmin=0, xmax=1000)
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
         aspect = (xlim[1] - xlim[0]) / (ylim[1] - ylim[0])
@@ -49,7 +51,14 @@ class ThermalProperty:
                    frameon=False)
         plt.xlabel("Temperatures (K)")
         plt.ylabel("Thermal properties")
-        
+
+        ax.xaxis.set_ticks_position('both')
+        ax.yaxis.set_ticks_position('both')
+        ax.xaxis.set_tick_params(which='both', direction='in')
+        ax.yaxis.set_tick_params(which='both', direction='in')
+
+        fig.tight_layout()
+
     def save_figure(self, plt):
         plt.savefig("tprops.png")
 
@@ -64,16 +73,16 @@ class ThermalProperty:
         self._thermal_properties = self._phonon.get_thermal_properties()
 
     def _get_Z(self):
-        primitive = self._phonon.get_primitive()
-        numbers = primitive.get_atomic_numbers()
+        numbers = self._phonon.get_unitcell().get_atomic_numbers()
         return get_Z(numbers)
             
 if __name__ == '__main__':
+    import os
     import sys
     import yaml
     from phonopy import Phonopy
-    from phonopy.interface.phonopy_yaml import phonopyYaml
-    from phonopy.file_IO import parse_FORCE_SETS
+    from phonopy.interface.phonopy_yaml import get_unitcell_from_phonopy_yaml
+    from phonopy.file_IO import parse_FORCE_SETS, parse_BORN
     from cogue.crystal.utility import get_angles, get_lattice_parameters
     import matplotlib
 
@@ -83,16 +92,20 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
     
     if len(sys.argv) > 1:
-        cell = phonopyYaml(sys.argv[1]).get_atoms()
+        cell = get_unitcell_from_phonopy_yaml(sys.argv[1])
     else:
-        cell = phonopyYaml("POSCAR-unitcell.yaml").get_atoms()
+        cell = get_unitcell_from_phonopy_yaml("POSCAR-unitcell.yaml")
     phonon_info = yaml.load(open("phonon.yaml"))
-    phonon = Phonopy(cell,
-                     phonon_info['supercell_matrix'],
-                     is_auto_displacements=False)
+    phonon = Phonopy(cell, phonon_info['supercell_matrix'])
     force_sets = parse_FORCE_SETS()
     phonon.set_displacement_dataset(force_sets)
     phonon.produce_force_constants()
+    if os.path.isfile("BORN"):
+        with open("BORN") as f:
+            primitive = phonon.get_primitive()
+            nac_params = parse_BORN(primitive, filename="BORN")
+            nac_params['factor'] = 14.399652
+            phonon.set_nac_params(nac_params)
     
     distance = 100
     tprops = ThermalProperty(phonon, distance=distance)
@@ -104,4 +117,4 @@ if __name__ == '__main__':
         print("mesh (x=%f) = %s" % (distance, tprops.get_mesh()))
         tprops.save_figure(plt)
     else:
-        print "Thermal property calculation failed."
+        print("Thermal property calculation failed.")
