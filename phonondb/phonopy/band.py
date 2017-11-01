@@ -61,10 +61,10 @@ class Band:
         ax.spines['right'].set_visible(False)
         ax.spines['bottom'].set_visible(False)
         ax.spines['left'].set_visible(False)
-        
+
         for d in unconnected_points:
             plt.axvline(x=d, linestyle='-', linewidth=1.5, color='k')
-        
+
         x_pairs = np.reshape(unconnected_points, (-1, 2))
         x_pairs /= unconnected_points[-1]
         ymin, ymax = ax.get_ylim()
@@ -80,7 +80,7 @@ class Band:
 
     def write_band_yaml(self):
         self._phonon.write_yaml_band_structure()
-        
+
     def save_band(self, plt):
         plt.savefig("band.png")
 
@@ -88,7 +88,7 @@ class Band:
         point_coords = band_path['point_coords']
         for path in band_path['path']:
             self._append_band(point_coords[path[0]], point_coords[path[1]])
-        
+
     def _set_labels(self, band_path):
         labels = []
         prev_path = None
@@ -136,9 +136,14 @@ if __name__ == '__main__':
     from phonopy import Phonopy
     from phonopy.interface.phonopy_yaml import get_unitcell_from_phonopy_yaml
     from phonopy.file_IO import parse_FORCE_SETS, parse_BORN
-    from cogue.crystal.utility import (get_angles, get_lattice_parameters,
-                                       frac2val)
     import matplotlib
+
+    def frac2val(string):
+        if '/' in string:
+            num, denom = [float(x) for x in string.split('/')]
+            return num / denom
+        else:
+            return float(string)
 
     if len(sys.argv) > 1:
         cell = get_unitcell_from_phonopy_yaml(sys.argv[1])
@@ -162,7 +167,7 @@ if __name__ == '__main__':
                     else:
                         print("PRIMITIVE_AXIS is something wrong.")
                         sys.exit(1)
-    
+
                     break
 
     if phonon is None:
@@ -201,4 +206,3 @@ if __name__ == '__main__':
 
         band.plot_band(plt, delta_d=(delta_d))
         band.save_band(plt)
-
