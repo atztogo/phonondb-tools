@@ -42,7 +42,7 @@ citation_mp = """Citation
 .. _the Materials Project citation: https://materialsproject.org/citing
 .. _SeeK-path: http://materialscloud.org/tools/seekpath
 
-.. 
+..
 
 The initial crystal structure used to perform phonon calculation is
 obtained from `the Materials Project`_. The phonon band structure
@@ -160,7 +160,7 @@ def make_each_data_rst(num, mp_dat_directory, data_directory):
                                date="%d-%d-%d" % (today.year,
                                                   today.month,
                                                   today.day)))
-    
+
         if os.path.exists(band_filename):
             w.write("Phonon band structure\n")
             w.write("----------------------\n\n")
@@ -185,7 +185,7 @@ def make_each_data_rst(num, mp_dat_directory, data_directory):
             w.write("Properties at 0GPa under quasi-harmonic approximation\n")
             w.write("-----------------------------------------------------\n\n")
             w.write(".. image:: mp-{mid}-qha.png\n\n".format(mid=num))
-            
+
         with open(poscar_yaml_filename) as f_poscar:
             w.write("POSCAR.yaml\n")
             w.write("----------------\n\n")
@@ -202,7 +202,7 @@ def make_each_data_rst(num, mp_dat_directory, data_directory):
         w.write(data_license)
 
 def main(d):
-    mp_filename = "/home/togo/autocalc/calc20160429/data_arrange/phonon-data/mp-list.dat"
+    mp_filename = "/home/togo/autocalc/calc20160429/data_arrange/phonon-run/mp-list.dat"
     numbers = get_mp_numbers(mp_filename)
 
     make_index_rst_for_each1000(d, numbers)

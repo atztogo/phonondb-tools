@@ -1,4 +1,5 @@
-1. Make directory from d000 to d999.
+# How to create sphinx document
+1. Make directory from d000 to d999 and create index.rst by make_index.zsh that calls makee_rst.py
 2. Put necessary data, .lzma, .png, POSCAR.yaml, etc, in each directory by using file_move.sh.
 3. Run create_sphinx_files.sh.
 4. Run run_sphinx.sh.
