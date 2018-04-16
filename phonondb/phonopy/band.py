@@ -181,6 +181,7 @@ if __name__ == '__main__':
             primitive = phonon.get_primitive()
             nac_params = parse_BORN(primitive, filename="BORN")
             nac_params['factor'] = 14.399652
+            nac_params['method'] = 'gonze'
             phonon.set_nac_params(nac_params)
 
     band = Band(phonon, num_qpoints=101)

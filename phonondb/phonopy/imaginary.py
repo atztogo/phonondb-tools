@@ -27,7 +27,7 @@ class Imaginary:
 
     def _set_mesh(self, distance=200):
         self._mesh = klength2mesh(distance, self._lattice)
-    
+
     def _run_mesh_sampling(self):
         self._phonon.set_mesh(self._mesh)
 
@@ -35,7 +35,7 @@ class Imaginary:
         _, weights, freqs, _ = self._phonon.get_mesh()
         self._ratio = (float(np.extract(freqs[:, 0] < 0, weights).sum()) /
                        np.prod(self._mesh))
-    
+
 if __name__ == '__main__':
     import sys
     import yaml
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     force_sets = parse_FORCE_SETS()
     phonon.set_displacement_dataset(force_sets)
     phonon.produce_force_constants()
-    
+
     distance = 200
     imaginary = Imaginary(phonon, distance=distance)
 

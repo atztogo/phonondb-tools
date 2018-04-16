@@ -64,10 +64,10 @@ class ThermalProperty:
 
     def _set_mesh(self, distance=100):
         self._mesh = klength2mesh(distance, self._lattice)
-    
+
     def _run_mesh_sampling(self):
         return self._phonon.set_mesh(self._mesh)
-    
+
     def _run_thermal_properties(self):
         self._phonon.set_thermal_properties(t_max=3000)
         self._thermal_properties = self._phonon.get_thermal_properties()
@@ -75,7 +75,7 @@ class ThermalProperty:
     def _get_Z(self):
         numbers = self._phonon.get_unitcell().get_atomic_numbers()
         return get_Z(numbers)
-            
+
 if __name__ == '__main__':
     import os
     import sys
@@ -86,11 +86,11 @@ if __name__ == '__main__':
     from cogue.crystal.utility import get_angles, get_lattice_parameters
     import matplotlib
 
-    matplotlib.use('Agg')            
+    matplotlib.use('Agg')
     matplotlib.rcParams.update({'figure.figsize': (4.5, 3),
                                 'font.family': 'serif'})
     import matplotlib.pyplot as plt
-    
+
     if len(sys.argv) > 1:
         cell = get_unitcell_from_phonopy_yaml(sys.argv[1])
     else:
@@ -105,8 +105,9 @@ if __name__ == '__main__':
             primitive = phonon.get_primitive()
             nac_params = parse_BORN(primitive, filename="BORN")
             nac_params['factor'] = 14.399652
+            nac_params['method'] = 'gonze'
             phonon.set_nac_params(nac_params)
-    
+
     distance = 100
     tprops = ThermalProperty(phonon, distance=distance)
     if tprops.run():

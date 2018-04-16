@@ -34,11 +34,10 @@ class DOS:
         self._phonon.write_total_DOS()
 
     def plot_dos(self, plt):
-        fig = plt.figure()
+        fig, ax = plt.subplots()
         # fig.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15)
         plt.tick_params(axis='both', which='major', labelsize=10.5)
-        ax = fig.add_subplot(111)
-        plt.plot(self._freqs, self._dos, 'r-')
+        plt.plot(self._freqs, self._dos, 'r-', linewidth=1)
 
         f_min, f_max = self._get_f_range()
         plt.xlim(xmin=f_min, xmax=f_max)
@@ -56,7 +55,7 @@ class DOS:
         plt.xlabel("Frequency (THz)")
         plt.ylabel("Phonon DOS\n(States/THz$\cdot$unitcell)")
         fig.tight_layout()
-        
+
     def save_dos(self, plt):
         plt.savefig("dos.png")
 
@@ -80,15 +79,15 @@ class DOS:
 
         f_max = self._freqs[i_max]
         f_max += (f_max - f_min) * 0.05
-            
+
         return f_min, f_max
 
     def _set_mesh(self):
         self._mesh = klength2mesh(self._distance, self._lattice)
-    
+
     def _run_mesh_sampling(self):
         return self._phonon.set_mesh(self._mesh)
-    
+
     def _run_dos(self, tetrahedron_method=True):
         if self._phonon.set_total_DOS(tetrahedron_method=tetrahedron_method):
             self._freqs, self._dos = self._phonon.get_total_DOS()
@@ -118,9 +117,10 @@ if __name__ == '__main__':
             primitive = phonon.get_primitive()
             nac_params = parse_BORN(primitive, filename="BORN")
             nac_params['factor'] = 14.399652
+            nac_params['method'] = 'gonze'
             phonon.set_nac_params(nac_params)
 
-    matplotlib.use('Agg')            
+    matplotlib.use('Agg')
     matplotlib.rcParams.update({'figure.figsize': (5, 2.8),
                                 'font.family': 'serif'})
     import matplotlib.pyplot as plt
