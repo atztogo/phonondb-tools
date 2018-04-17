@@ -31,7 +31,7 @@ tmpl_mp = """Materials id {mid} / {pretty_formula} / {spg_int} / {contents}
 
 """
 
-tmpl_mp = """Materials id {mid} / {pretty_formula} / {spg_int} / {contents}
+tmpl_mp = """Materials id {mid} / {pretty_formula} / {spg_int}
 ==============================================================================
 
 - Date page updated: {date}
@@ -178,6 +178,7 @@ def make_each_data_rst(num, mp_dat_directory, data_directory):
         if os.path.exists(tprops_filename):
             w.write("Thermal properties at constant volume\n")
             w.write("--------------------------------------\n\n")
+            w.write("Imaginary modes are excluded if they exist.\n\n")
             w.write(".. image:: mp-{mid}-tprops.png\n\n".format(mid=num))
 
         if os.path.exists(gruneisen_filename):
