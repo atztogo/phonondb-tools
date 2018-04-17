@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+"""Put in ph20180417 and run in ph20180417/dxxx
+
+% python ../make_rst.py xxx
+
+"""
+
 import os.path
 from datetime import date
 from cogue import symmetry as get_symmetry
@@ -31,6 +37,7 @@ tmpl_mp = """Materials id {mid} / {pretty_formula} / {spg_int} / {contents}
 - Date page updated: {date}
 - Space group type: {spg}
 - Number of formula units (Z): {num_units}
+- Phonon raw data: :download:`{filename} <./{filename}>`
 - Link to Materials Project: `https://www.materialsproject.org/materials/mp-{mid}/ <https://www.materialsproject.org/materials/mp-{mid}/>`_
 
 """
@@ -114,11 +121,6 @@ def make_each_data_rst(num, mp_dat_directory, data_directory):
     cell, _ = read_poscar_yaml(poscar_yaml_filename)
     symmetry = get_symmetry(cell)
 
-    # dos_filename = "mp-%d-dos.png" % num
-    # tprops_filename = "mp-%d-tprops.png" % num
-    # gruneisen_filename = "mp-%d-gruneisen.png" % num
-    # qha_filename = "mp-%d-qha.png" % num
-
     band_filename = "{dir}/band.png".format(dir=data_directory)
     dos_filename = "{dir}/dos.png".format(dir=data_directory)
     tprops_filename = "{dir}/tprops.png".format(dir=data_directory)
@@ -158,7 +160,7 @@ def make_each_data_rst(num, mp_dat_directory, data_directory):
                                spg_int="%s (%d)" % (symmetry['international'],
                                                      symmetry['number']),
                                num_units="%d" % get_Z(cell.get_numbers()),
-                               #filename="mp-%d.tar.lzma" % num,
+                               filename="mp-%d-20180417.tar.lzma" % num,
                                date="%d-%d-%d" % (today.year,
                                                   today.month,
                                                   today.day)))
@@ -204,7 +206,8 @@ def make_each_data_rst(num, mp_dat_directory, data_directory):
         w.write(data_license)
 
 def main(d):
-    mp_filename = "/home/togo/autocalc/calc20160429/data_arrange/phonon-run/mp-list-phonon-succeeded.dat"
+    data_dir = "/home/togo/autocalc/calc20160429/data_arrange/phonon-run"
+    mp_filename = "{}/mp-list-phonon-succeeded.dat".format(data_dir)
     numbers = get_mp_numbers(mp_filename)
 
     make_index_rst_for_each1000(d, numbers)
@@ -212,7 +215,7 @@ def main(d):
     for num in numbers:
         if num in range(d * 1000, (d + 1) * 1000):
             mp_dat_directory = "/home/togo/autocalc/MP-data-20160409/mp-data"
-            data_directory = "/home/togo/autocalc/calc20160429/data_arrange/phonon-run/mp-{num}".format(num=num)
+            data_directory = "{}/mp-{}".format(data_dir, num)
             make_each_data_rst(num, mp_dat_directory, data_directory)
 
 if __name__ == "__main__":
