@@ -14,8 +14,8 @@ tmpl_index = """Materials id {midstart} - {midend}
 
 """
 
-tmpl_mp = """Materials id {mid} / {pretty_formula} / {contents}
-===================================================================
+tmpl_mp = """Materials id {mid} / {pretty_formula} / {spg_int} / {contents}
+==============================================================================
 
 - Date page updated: {date}
 - Space group type: {spg}
@@ -25,8 +25,8 @@ tmpl_mp = """Materials id {mid} / {pretty_formula} / {contents}
 
 """
 
-tmpl_mp = """Materials id {mid} / {pretty_formula} / {contents}
-===================================================================
+tmpl_mp = """Materials id {mid} / {pretty_formula} / {spg_int} / {contents}
+==============================================================================
 
 - Date page updated: {date}
 - Space group type: {spg}
@@ -155,6 +155,8 @@ def make_each_data_rst(num, mp_dat_directory, data_directory):
                                spg="%s (%d) / %s" % (symmetry['international'],
                                                      symmetry['number'],
                                                      symmetry['hall']),
+                               spg_int="%s (%d)" % (symmetry['international'],
+                                                     symmetry['number']),
                                num_units="%d" % get_Z(cell.get_numbers()),
                                #filename="mp-%d.tar.lzma" % num,
                                date="%d-%d-%d" % (today.year,
@@ -202,7 +204,7 @@ def make_each_data_rst(num, mp_dat_directory, data_directory):
         w.write(data_license)
 
 def main(d):
-    mp_filename = "/home/togo/autocalc/calc20160429/data_arrange/phonon-run/mp-list.dat"
+    mp_filename = "/home/togo/autocalc/calc20160429/data_arrange/phonon-run/mp-list-phonon-succeeded.dat"
     numbers = get_mp_numbers(mp_filename)
 
     make_index_rst_for_each1000(d, numbers)
@@ -210,7 +212,7 @@ def main(d):
     for num in numbers:
         if num in range(d * 1000, (d + 1) * 1000):
             mp_dat_directory = "/home/togo/autocalc/MP-data-20160409/mp-data"
-            data_directory = "/home/togo/autocalc/calc20160429/data_arrange/phonon-data/mp-{num}".format(num=num)
+            data_directory = "/home/togo/autocalc/calc20160429/data_arrange/phonon-run/mp-{num}".format(num=num)
             make_each_data_rst(num, mp_dat_directory, data_directory)
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ Phonon database at Kyoto university
 .. toctree::
    :maxdepth: 1
 
-   about	     
+   about
 
 Available data
 ---------------
@@ -13,7 +13,7 @@ Available data
    :maxdepth: 1
 
    citation
-   ph20170621/index
+   ph20180417/index
    ph20151124/index
 
 License
@@ -31,4 +31,3 @@ Contact
 --------
 
 * `Atsushi Togo <http://atztogo.github.io/>`_ : atz.togo@gmail.com
-   
