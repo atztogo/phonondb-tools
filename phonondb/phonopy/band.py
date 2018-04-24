@@ -112,6 +112,8 @@ class Band:
                 labels[i] = "$" + l.replace("SIGMA", "\Sigma") + "$"
             elif 'DELTA' in l:
                 labels[i] = "$" + l.replace("DELTA", "\Delta") + "$"
+            elif 'LAMBDA' in l:
+                labels[i] = "$" + l.replace("LAMBDA", "\Lambda") + "$"
             else:
                 labels[i] = "$\mathrm{%s}$" % l
 
